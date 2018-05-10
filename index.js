@@ -39,7 +39,7 @@ GiApp.on('identified', () => {
   output('Client identified', 'success');
 
   //Handshake for the user
-  GiApp.send(user, 'handshake');
+  GiApp.handshake(config.user.name);
 
   prompt_me();
 });

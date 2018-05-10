@@ -1,0 +1,27 @@
+{
+  "name": "gi-client-cli",
+  "description": "Good Intentions CLI Test Client",
+  "version": "0.0.1",
+  "license": "MIT",
+  "author": {
+    "name": "Darren Moore",
+    "email": "darren.m@firecreekweb.com",
+    "url": "http://goodintentions.firecreekweb.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GoodIntentionsAssistant/gi-client-cli.git"
+  },
+  "licenses": [],
+  "engines": {
+    "~node": "0.10.0"
+  },
+  "devDependencies": {},
+  "scripts": {},
+  "dependencies": {
+    "gi-sdk-nodejs": "0.0.4",
+    "prompt": "^1.0.0",
+    "socket.io": "^2.1.0"
+  },
+  "keywords": []
+}
