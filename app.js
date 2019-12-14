@@ -20,7 +20,7 @@ output('Loading GI SDK and attemping connection');
 
 //Prompt input
 const prompt = require('prompt');
-let prompt_loaded = false;
+let prompt_listening = false;
 
 //Start the SDK
 GiApp = new GiClient(config.gi.name, config.gi.secret, config.gi.host);
@@ -32,7 +32,7 @@ GiApp.on('connect', () => {
 
 GiApp.on('disconnect', () => {
 	output('Disconnected', 'warning');
-  //prompt.pause();
+  prompt.pause();
 });
 
 GiApp.on('identified', () => {
@@ -41,12 +41,12 @@ GiApp.on('identified', () => {
   //Handshake for the user
   GiApp.handshake(config.user.name);
 
-  prompt_me();
+  prompt_cli();
 });
 
 GiApp.on('error', (data) => {
 	output('Error: '+data.message, 'error');
-  prompt.resume();
+  prompt_cli();
 });
 
 GiApp.on('notice', (data) => {
@@ -60,7 +60,7 @@ GiApp.on('type_start', () => {
 
 GiApp.on('type_end', () => {
 	output('GI has finished typing', 'mute');
-  prompt_me();
+  prompt_cli();
 });
 
 GiApp.on('message', (data) => {
@@ -122,7 +122,22 @@ function output(string, colour = 'default') {
 	console.log(colours[colour][0] + string + colours[colour][1]);
 }
 
-function prompt_me() {
+
+function prompt_cli() {
+  //Pause or start prompt
+  if(prompt.paused) {
+    prompt.resume();
+  }
+  else {
+    prompt.start();
+  }
+
+  //Listening for input
+  if(prompt_listening == true) {
+    return;
+  }
+  prompt_listening = true;
+
 	var schema = {
 		properties: {
 			input: {
@@ -131,16 +146,11 @@ function prompt_me() {
 		}
   };
   prompt.message = '';
-
-  if(prompt.paused) {
-    prompt.resume();
-  }
-  else {
-    prompt.start();
-  }
-
-	prompt.get(schema, function (err, result) {
-		GiApp.send(config.user.name, 'message', result.input);
+  
+  prompt.get(schema, function (err, result) {
+    GiApp.send(config.user.name, 'message', result.input);
+    prompt_listening = false;
     prompt.pause();
-	});
+  });
+
 }
