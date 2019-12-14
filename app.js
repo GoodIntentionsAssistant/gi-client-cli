@@ -64,14 +64,24 @@ GiApp.on('type_end', () => {
 });
 
 GiApp.on('message', (data) => {
-  //Messages
-  for(var ii=0; ii<data.messages.length; ii++) {
-    output(data.messages[ii]);
-  }
 
   //Attachments
-  if(data.attachments.actions) {
-    var actions = data.attachments.actions;
+  if(data.attachments.message) {
+    var message = data.attachments.message;
+    for(var ii=0; ii<message.length; ii++) {
+      output('Message: '+message[ii].text, 'secondary');
+    }
+  }
+
+  if(data.attachments.voice) {
+    var voice = data.attachments.voice;
+    for(var ii=0; ii<voice.length; ii++) {
+      output('Voice: '+voice[ii].text, 'secondary');
+    }
+  }
+
+  if(data.attachments.action) {
+    var actions = data.attachments.action;
     var _data = []; 
     for(var ii=0; ii<actions.length; ii++) {
       _data.push(actions[ii].text);
@@ -79,29 +89,15 @@ GiApp.on('message', (data) => {
     output('Options: '+_data.join(', '), 'secondary');
   }
 
-  if(data.attachments.images) {
-    var images = data.attachments.images;
+  if(data.attachments.image) {
+    var images = data.attachments.image;
     for(var ii=0; ii<images.length; ii++) {
       output('Image: '+images[ii].url, 'secondary');
     }
   }
 
-  if(data.attachments.shortcuts) {
-    var shortcuts = data.attachments.shortcuts;
-    for(var ii=0; ii<shortcuts.length; ii++) {
-      output('Shortcut: '+shortcuts[ii].text, 'secondary');
-    }
-  }
-
-  if(data.attachments.links) {
-    var links = data.attachments.links;
-    for(var ii=0; ii<links.length; ii++) {
-      output('Link: '+links[ii].text+' ['+links[ii].url+']', 'secondary');
-    }
-  }
-
-  if(data.attachments.fields) {
-    var fields = data.attachments.fields;
+  if(data.attachments.field) {
+    var fields = data.attachments.field;
     for(var ii=0; ii<fields.length; ii++) {
       output('Field: '+fields[ii].title+': '+fields[ii].value, 'secondary');
     }
@@ -154,3 +150,8 @@ function prompt_cli() {
   });
 
 }
+
+
+setInterval(function() {
+  GiApp.send(config.user.name, 'message', 'meep');
+}, 3000);
