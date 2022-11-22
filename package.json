@@ -21,7 +21,7 @@
   "dependencies": {
     "gi-sdk-nodejs": "0.0.4",
     "prompt": "^1.0.0",
-    "socket.io": "^2.1.0"
+    "socket.io": "^2.5.0"
   },
   "keywords": []
 }
